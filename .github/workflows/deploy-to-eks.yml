@@ -83,16 +83,21 @@ jobs:
           kubectl apply -f processed-k8s/$(basename $file)
         done
         
-        # Wait for deployments to be ready
+        # Wait for deployments to be ready with increased timeout
         echo "Waiting for backend deployment..."
-        kubectl rollout status deployment/securepen-backend --timeout=300s
+        kubectl rollout status deployment/securepen-backend --timeout=600s
         
         echo "Waiting for frontend deployment..."
         kubectl rollout status deployment/securepen-frontend --timeout=300s
         
-        # Get the load balancer URL
+        # Get the load balancer URL and save to GitHub output
+        LB_URL=$(kubectl get svc securepen-frontend-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+        echo "APPLICATION_URL=${LB_URL}" >> $GITHUB_ENV
+        echo "APPLICATION_URL=${LB_URL}" >> $GITHUB_OUTPUT
+        
         echo "Application deployed successfully!"
-        echo "Load Balancer URL: $(kubectl get svc securepen-frontend-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
+        echo "::notice title=Deployment Complete::Load Balancer URL: ${LB_URL}"
+        echo "Load Balancer URL: ${LB_URL}"
         
     - name: Verify Deployment
       run: |

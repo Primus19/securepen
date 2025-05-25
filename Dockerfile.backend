@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18-slim
 WORKDIR /app
 
 # Copy package files
@@ -7,7 +7,8 @@ COPY backend/package-lock.json* ./
 
 # Install dependencies with explicit morgan installation
 # Using --no-optional for Windows compatibility
-RUN npm install --no-optional && \
+RUN apt-get update && apt-get install -y python3 make g++ && \
+    npm install --no-optional && \
     npm install morgan@1.10.0 express cors sqlite3 bcrypt jsonwebtoken cookie-parser --save && \
     npm cache clean --force && \
     # Verify morgan is installed

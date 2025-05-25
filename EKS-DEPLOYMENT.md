@@ -48,6 +48,21 @@ securepen/
    - Deploy to your EKS cluster using the Kubernetes manifests
    - Output the Load Balancer URL for accessing the application
 
+### Troubleshooting Common Issues
+
+#### Backend Pod Crashes (SIGSEGV)
+If you encounter backend pod crashes with SIGSEGV errors:
+- The application now uses node:18-slim instead of Alpine to avoid compatibility issues
+- Memory limits have been increased to 1Gi to prevent out-of-memory errors
+- Native modules are properly built with required dependencies
+
+#### Load Balancer URL Not Appearing
+- The GitHub Actions workflow now explicitly outputs the Load Balancer URL in multiple ways:
+  - As a GitHub Environment variable
+  - As a GitHub Output variable
+  - As a GitHub Notice
+  - In the workflow logs
+
 ### Manual Deployment (if needed)
 
 1. Configure AWS CLI and authenticate with ECR:
@@ -72,39 +87,28 @@ securepen/
 
 4. Apply Kubernetes manifests:
    ```bash
-   export ECR_REPOSITORY_URI=<your-aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/securepen
-   export IMAGE_TAG=latest
-   
-   # Process and apply each manifest
-   for file in k8s/*.yaml; do
-     envsubst < $file > processed-$file
-     kubectl apply -f processed-$file
-   done
+   cd k8s-deployment
+   ./deploy-to-eks.sh
    ```
 
-5. Verify deployments:
-   ```bash
-   kubectl get pods
-   kubectl get svc
-   ```
-
-6. Get the application URL:
-   ```bash
-   kubectl get svc securepen-frontend-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
-   ```
+5. The script will:
+   - Create the ECR repository if it doesn't exist
+   - Process and apply all Kubernetes manifests
+   - Wait for deployments to be ready
+   - Output and save the Load Balancer URL
 
 ## Monitoring and Troubleshooting
 
 - Check pod status:
   ```bash
-  kubectl get pods
+  kubectl get pods -l app=securepen
   kubectl describe pod <pod-name>
   kubectl logs <pod-name>
   ```
 
 - Check service status:
   ```bash
-  kubectl get svc
+  kubectl get svc -l app=securepen
   kubectl describe svc securepen-frontend-service
   ```
 
@@ -118,7 +122,8 @@ securepen/
 
 To remove all resources:
 ```bash
-kubectl delete -f k8s/
+cd k8s-deployment
+./cleanup-eks.sh
 ```
 
 ## Security Considerations
