@@ -5,6 +5,8 @@ metadata:
   labels:
     app: securepen
     tier: backend
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
 spec:
   selector:
     app: securepen
