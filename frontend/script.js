@@ -1,5 +1,17 @@
 // API base URL configuration
-const API_BASE_URL = "http://ad0172da2bacb4726ab42e7c5a01cb87-3e410709a7cfeff6.elb.us-east-1.amazonaws.com/api"; // Updated to use absolute URL for production
+const API_BASE_URL = (() => {
+  // Get the current hostname
+  const hostname = window.location.hostname;
+  const protocol = window.location.protocol;
+  
+  // If running locally (development)
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return '/api'; // Use relative URL for local development
+  }
+  
+  // In production, use the same origin
+  return `${protocol}//${hostname}/api`;
+})();
 
 // DOM Elements
 const dashboardLink = document.getElementById("dashboard-link");
