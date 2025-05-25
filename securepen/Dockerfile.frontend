@@ -1,0 +1,12 @@
+FROM node:16-alpine
+WORKDIR /app
+# Install http-server for static file serving
+RUN npm install -g http-server
+
+# Copy all frontend static files (index.html, script.js, styles.css, etc.)
+COPY frontend/ /app
+
+EXPOSE 80
+
+# Serve static files
+CMD ["http-server", ".", "-p", "80", "-a", "0.0.0.0", "-c-1"]

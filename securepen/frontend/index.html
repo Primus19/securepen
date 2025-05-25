@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecurePen 2.1 - Vulnerability Testing Lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="https://cdn-icons-png.flaticon.com/512/2092/2092663.png" alt="SecurePen Logo" width="40">
+      <h1>SecurePen 2.1</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#scanner">Scanner</a></li>
+        <li><a href="#sql">SQL Injection</a></li>
+        <li><a href="#xss">XSS</a></li>
+        <li><a href="#brute">Brute Force</a></li>
+        <li><a href="#path">Path Traversal</a></li>
+        <li><a href="#command">Command Injection</a></li>
+      </ul>
+    </nav>
+    <div class="user-controls">
+      <div id="user-logged-out">
+        <button id="login-button">Login</button>
+        <button id="register-button">Register</button>
+      </div>
+      <div id="user-logged-in" style="display: none;">
+        <span id="username-display"></span>
+        <button id="logout-button">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Auth Modals -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Login</h2>
+      <form id="login-form">
+        <input type="text" placeholder="Username" name="username" required>
+        <input type="password" placeholder="Password" name="password" required>
+        <button type="submit">Login</button>
+      </form>
+      <p>Don't have an account? <a href="#" id="show-register">Register</a></p>
+    </div>
+  </div>
+
+  <div id="register-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Register</h2>
+      <form id="register-form">
+        <input type="text" placeholder="Username" name="username" required>
+        <input type="email" placeholder="Email" name="email" required>
+        <input type="password" placeholder="Password" name="password" required>
+        <input type="password" placeholder="Confirm Password" name="confirm-password" required>
+        <button type="submit">Register</button>
+      </form>
+      <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+    </div>
+  </div>
+
+  <main>
+    <section id="dashboard" class="active">
+      <h2>Vulnerability Testing Lab</h2>
+      
+      <div class="dashboard-stats">
+        <div class="stat-box">
+          <h3>Tests Run</h3>
+          <p id="tests-count">0</p>
+        </div>
+        <div class="stat-box">
+          <h3>Vulnerabilities Exploited</h3>
+          <p id="vulns-count">0</p>
+        </div>
+        <div class="stat-box">
+          <h3>Success Rate</h3>
+          <p id="success-rate">0%</p>
+        </div>
+      </div>
+      
+      <div class="dashboard-charts">
+        <div class="chart-box">
+          <h3>Vulnerability Distribution</h3>
+          <div id="vuln-chart"></div>
+        </div>
+        <div class="activity-box">
+          <h3>Recent Activity</h3>
+          <div id="activity-log">
+            <p>Welcome to SecurePen 2.1</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="welcome-box">
+        <h3>Welcome to SecurePen 2.1!</h3>
+        <p>Practice ethical hacking in a safe environment. Test vulnerabilities and track progress. Click a section to start!</p>
+        <button id="get-started">Get Started</button>
+      </div>
+    </section>
+
+    <section id="scanner">
+      <h2>Vulnerability Scanner</h2>
+      <div class="info-icon">ℹ️</div>
+      <div class="instructions-panel">
+        <h4>Instructions</h4>
+        <p>The vulnerability scanner allows you to check applications for common security issues:</p>
+        <ol>
+          <li>Enter a target URL or application name</li>
+          <li>Select which vulnerabilities to scan for</li>
+          <li>Review the detailed report of findings</li>
+        </ol>
+        <p>This tool simulates how security professionals identify weaknesses in applications.</p>
+      </div>
+      <div class="scanner-box">
+        <h3>Target Scanner</h3>
+        <form id="scanner-form">
+          <input type="text" placeholder="Enter target URL or application name" required>
+          <div class="checkbox-group">
+            <label><input type="checkbox" value="sql" checked> SQL Injection</label>
+            <label><input type="checkbox" value="xss" checked> Cross-Site Scripting</label>
+            <label><input type="checkbox" value="csrf"> CSRF</label>
+            <label><input type="checkbox" value="auth"> Authentication</label>
+            <label><input type="checkbox" value="injection" checked> Command Injection</label>
+          </div>
+          <button type="submit">Scan</button>
+        </form>
+        <div id="scan-results"></div>
+      </div>
+    </section>
+
+    <section id="sql">
+      <h2>SQL Injection</h2>
+      <div class="info-icon">ℹ️</div>
+      <div class="instructions-panel">
+        <h4>SQL Injection Tutorial</h4>
+        <p>SQL Injection is a code injection technique that exploits vulnerabilities in applications that interact with databases.</p>
+        <h5>How to Test:</h5>
+        <ol>
+          <li>Enter <code>' OR '1'='1</code> in the username field</li>
+          <li>Enter anything in the password field</li>
+          <li>Submit the form</li>
+        </ol>
+        <h5>Why it works:</h5>
+        <p>The application builds an SQL query by directly concatenating user input. When you enter the payload, the query becomes:</p>
+        <pre>SELECT * FROM users WHERE username = '' OR '1'='1' AND password = 'anything'</pre>
+        <p>Since <code>'1'='1'</code> is always true, this bypasses authentication.</p>
+        <h5>Real-world impact:</h5>
+        <p>Attackers can bypass authentication, extract sensitive data, modify database content, or even delete entire tables.</p>
+      </div>
+      <div class="vuln-box">
+        <h3>Vulnerable Login</h3>
+        <p>Try: <code>' OR '1'='1</code></p>
+        <form id="sql-form">
+          <input type="text" placeholder="Username" required>
+          <input type="password" placeholder="Password" required>
+          <button type="submit">Login</button>
+        </form>
+        <div id="sql-results"></div>
+      </div>
+    </section>
+
+    <section id="xss">
+      <h2>Cross-Site Scripting (XSS)</h2>
+      <div class="info-icon">ℹ️</div>
+      <div class="instructions-panel">
+        <h4>XSS Attack Tutorial</h4>
+        <p>Cross-Site Scripting allows attackers to inject client-side scripts into web pages viewed by other users.</p>
+        <h5>How to Test:</h5>
+        <ol>
+          <li>Enter <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code> in the comment field</li>
+          <li>Submit the form</li>
+          <li>The script will execute, showing an alert</li>
+        </ol>
+        <h5>Alternative payloads:</h5>
+        <ul>
+          <li><code>&lt;img src="x" onerror="alert('XSS')"&gt;</code></li>
+          <li><code>&lt;body onload="alert('XSS')"&gt;</code></li>
+          <li><code>javascript:alert('XSS')</code></li>
+        </ul>
+        <h5>Real-world impact:</h5>
+        <p>Attackers can steal cookies, session tokens, redirect users to malicious sites, or perform actions on behalf of the victim.</p>
+      </div>
+      <div class="vuln-box">
+        <h3>Vulnerable Comment</h3>
+        <p>Try: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></p>
+        <form id="xss-form">
+          <input type="text" placeholder="Comment" required>
+          <button type="submit">Submit</button>
+        </form>
+        <div id="xss-results"></div>
+        <div id="xss-output"></div>
+      </div>
+    </section>
+
+    <section id="brute">
+      <h2>Brute Force</h2>
+      <div class="info-icon">ℹ️</div>
+      <div class="instructions-panel">
+        <h4>Brute Force Attack Tutorial</h4>
+        <p>Brute force attacks attempt to crack passwords by trying many combinations until finding the correct one.</p>
+        <h5>How to Test:</h5>
+        <ol>
+          <li>Enter a username (try "admin")</li>
+          <li>Enter a list of passwords (one per line)</li>
+          <li>Include "password123" in your list</li>
+          <li>Submit the form to attempt to crack the password</li>
+        </ol>
+        <h5>Sample wordlist:</h5>
+        <pre>123456
+password
+admin
+qwerty
+welcome
+password123
+letmein</pre>
+        <h5>Real-world impact:</h5>
+        <p>Attackers can gain unauthorized access to accounts, especially those with weak passwords or without proper protections.</p>
+      </div>
+      <div class="vuln-box">
+        <h3>Password Cracker</h3>
+        <form id="brute-form">
+          <input type="text" placeholder="Username" required>
+          <textarea placeholder="Upload a wordlist" required></textarea>
+          <button type="submit">Crack</button>
+        </form>
+        <div id="brute-results"></div>
+      </div>
+    </section>
+
+    <section id="path">
+      <h2>Path Traversal</h2>
+      <div class="info-icon">ℹ️</div>
+      <div class="instructions-panel">
+        <h4>Path Traversal Tutorial</h4>
+        <p>Path traversal (directory traversal) attacks allow attackers to access files and directories outside the intended directory.</p>
+        <h5>How to Test:</h5>
+        <ol>
+          <li>Enter <code>../../../etc/passwd</code> in the filename field</li>
+          <li>Try variations like <code>..%2f..%2f..%2fetc%2fpasswd</code></li>
+          <li>Submit to attempt to access files outside the web root</li>
+        </ol>
+        <h5>Real-world impact:</h5>
+        <p>Attackers can access sensitive configuration files, source code, or other critical system files not intended for public access.</p>
+      </div>
+      <div class="vuln-box">
+        <h3>File Viewer</h3>
+        <form id="path-form">
+          <input type="text" placeholder="Enter a filename" required>
+          <button type="submit">View File</button>
+        </form>
+        <div id="path-results"></div>
+      </div>
+    </section>
+
+    <section id="command">
+      <h2>Command Injection</h2>
+      <div class="info-icon">ℹ️</div>
+      <div class="instructions-panel">
+        <h4>Command Injection Tutorial</h4>
+        <p>Command injection attacks allow execution of arbitrary commands on the host operating system.</p>
+        <h5>How to Test:</h5>
+        <ol>
+          <li>Enter a hostname like <code>localhost</code></li>
+          <li>Then try <code>localhost; ls -la</code></li>
+          <li>Or <code>localhost && cat /etc/passwd</code></li>
+          <li>Submit to see if commands are executed</li>
+        </ol>
+        <h5>Real-world impact:</h5>
+        <p>Attackers can execute system commands to access sensitive data, modify files, or even gain complete control of the server.</p>
+      </div>
+      <div class="vuln-box">
+        <h3>Network Ping Tool</h3>
+        <form id="command-form">
+          <input type="text" placeholder="Enter a hostname or IP" required>
+          <button type="submit">Ping</button>
+        </form>
+        <div id="command-results"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>SecurePen 2.1 - Vulnerability Testing Lab</p>
+    <p>For educational purposes only. Do not use these techniques on systems without proper authorization.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

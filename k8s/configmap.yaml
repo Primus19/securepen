@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: securepen-config
+data:
+  NODE_ENV: "production"
+  BACKEND_URL: "http://securepen-backend-service:3000"
+  JWT_SECRET: "securepen_jwt_secret_key_for_production"

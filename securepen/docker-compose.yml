@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: securepen-frontend:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - securepen-net
+
+  backend:
+    build:
+      context: .                   # use project root as context
+      dockerfile: Dockerfile.backend
+    image: securepen-backend:latest
+    ports:
+      - "3000:3000"
+    # Remove volume mounting to prevent node_modules being overwritten
+    # volumes:
+    #   - ./backend:/app
+    environment:
+      - NODE_ENV=production
+    networks:
+      - securepen-net
+
+networks:
+  securepen-net:
+    driver: bridge

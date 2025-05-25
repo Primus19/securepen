@@ -1,0 +1,29 @@
+FROM node:18-alpine
+WORKDIR /app
+
+# Copy package files
+COPY backend/package.json ./
+COPY backend/package-lock.json* ./
+
+# Install dependencies with explicit morgan installation
+# Using --no-optional for Windows compatibility
+RUN npm install --no-optional && \
+    npm install morgan@1.10.0 express cors sqlite3 bcrypt jsonwebtoken cookie-parser --save && \
+    npm cache clean --force && \
+    # Verify morgan is installed
+    node -e "require('morgan')"
+
+# Copy the rest of the code
+COPY backend/ ./
+
+# Create directory for database if needed
+RUN mkdir -p /app/files
+
+# Ensure node_modules is not overwritten
+RUN if [ ! -d "/app/node_modules" ]; then \
+      echo "Error: node_modules directory not found!"; \
+      exit 1; \
+    fi
+
+EXPOSE 3000
+CMD ["npm", "start"]
