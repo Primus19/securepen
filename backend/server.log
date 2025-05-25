@@ -1,5 +1,2 @@
-OPENAI_API_KEY environment variable not set. AI features will be limited.
-(node:22887) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
-(Use `node --trace-deprecation ...` to show where the warning was created)
-SecurePen backend server running on http://0.0.0.0:3000
-Connected to database: ./vulnerabilities.db
+Connected to SQLite database at ./vulnerabilities.db
+Server running on port 3000
