@@ -1,91 +1,91 @@
-/* Notification Styles */
+/* Notification styles for SecurePen application */
+
 .notification-container {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 9999;
-  max-width: 350px;
-  width: 100%;
+  width: 300px;
+  max-width: 90%;
 }
 
 .notification {
-  background-color: #1e2a38;
-  color: #ffffff;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   margin-bottom: 10px;
   padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: flex-start;
-  position: relative;
-  animation: notification-slide-in 0.3s ease-out forwards;
+  animation: slide-in 0.3s ease-out forwards;
+  background-color: #2c3e50;
+  color: #ecf0f1;
   border-left: 4px solid #3498db;
-  overflow: hidden;
 }
 
-.notification.success {
+.notification-success {
   border-left-color: #2ecc71;
 }
 
-.notification.error {
+.notification-error {
   border-left-color: #e74c3c;
 }
 
-.notification.warning {
+.notification-warning {
   border-left-color: #f39c12;
 }
 
-.notification-hide {
-  animation: notification-slide-out 0.3s ease-out forwards;
+.notification-info {
+  border-left-color: #3498db;
 }
 
 .notification-icon {
-  margin-right: 12px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-right: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  border-radius: 50%;
 }
 
-.notification.success .notification-icon {
-  color: #2ecc71;
+.notification-success .notification-icon {
+  background-color: #2ecc71;
+  color: white;
 }
 
-.notification.error .notification-icon {
-  color: #e74c3c;
+.notification-error .notification-icon {
+  background-color: #e74c3c;
+  color: white;
 }
 
-.notification.warning .notification-icon {
-  color: #f39c12;
+.notification-warning .notification-icon {
+  background-color: #f39c12;
+  color: white;
 }
 
-.notification.info .notification-icon {
-  color: #3498db;
+.notification-info .notification-icon {
+  background-color: #3498db;
+  color: white;
 }
 
 .notification-message {
   flex: 1;
-  font-size: 14px;
-  line-height: 1.4;
+  padding-right: 10px;
 }
 
 .notification-close {
-  background: none;
-  border: none;
-  color: #aaa;
   cursor: pointer;
-  font-size: 16px;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  transition: color 0.2s;
+  font-size: 18px;
+  font-weight: bold;
+  color: #bdc3c7;
 }
 
 .notification-close:hover {
-  color: #fff;
+  color: white;
 }
 
-@keyframes notification-slide-in {
+@keyframes slide-in {
   from {
     transform: translateX(100%);
     opacity: 0;
@@ -96,7 +96,7 @@
   }
 }
 
-@keyframes notification-slide-out {
+@keyframes fade-out {
   from {
     transform: translateX(0);
     opacity: 1;
@@ -107,104 +107,6 @@
   }
 }
 
-/* Test Result Styles */
-.test-result {
-  margin-top: 20px;
-}
-
-.result-card {
-  background-color: #1e2a38;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.result-card.vulnerable {
-  border-left: 4px solid #e74c3c;
-}
-
-.result-card.secure {
-  border-left: 4px solid #2ecc71;
-}
-
-.result-card.error {
-  border-left: 4px solid #f39c12;
-}
-
-.result-header {
-  padding: 15px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.result-icon {
-  margin-right: 12px;
-  font-size: 24px;
-}
-
-.result-card.vulnerable .result-icon {
-  color: #e74c3c;
-}
-
-.result-card.secure .result-icon {
-  color: #2ecc71;
-}
-
-.result-card.error .result-icon {
-  color: #f39c12;
-}
-
-.result-title {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.result-body {
-  padding: 15px;
-}
-
-.result-body p {
-  margin: 0 0 10px;
-  line-height: 1.5;
-}
-
-/* Loading Animation */
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  color: #3498db;
-  font-weight: 500;
-}
-
-.loading:before {
-  content: '';
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  border: 3px solid #3498db;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: loading-spinner 0.8s linear infinite;
-}
-
-@keyframes loading-spinner {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Form Error Styles */
-.form-error {
-  color: #e74c3c;
-  font-size: 13px;
-  margin-top: 5px;
-  display: block;
-}
-
-input.error {
-  border-color: #e74c3c !important;
+.notification.fade-out {
+  animation: fade-out 0.3s ease-out forwards;
 }
